@@ -2,6 +2,7 @@ import styles from './index.module.css'
 import { signIn, signOut, useSession } from 'next-auth/react'
 import Head from 'next/head'
 import Link from 'next/link'
+import Timer from '~/components/Timer/Timer'
 import { api } from '~/utils/api'
 
 export default function Home() {
@@ -16,6 +17,7 @@ export default function Home() {
       </Head>
       <main className={styles.main}>
         <div className={styles.container}>
+          <Timer />
           <h1 className={styles.title}>
             Create <span className={styles.pinkSpan}>T3</span> App
           </h1>
