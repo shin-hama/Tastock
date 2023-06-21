@@ -31,7 +31,7 @@ const Timer: FC = () => {
   }
 
   return (
-    <Stack direction='row'>
+    <Stack direction='row' spacing={2} alignItems='center'>
       <TextField />
       <Typography>
         {dayjs.duration(elapsed, 'seconds').format('HH:mm:ss')}
