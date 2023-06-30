@@ -11,10 +11,27 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Example {
+// Task
+
+model Task {
+    id        String    @id @default(cuid())
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    name      String?
+    startedAt DateTime  @default(now())
+    endedat   DateTime?
+    owner     User      @relation(fields: [userId], references: [id])
+    userId    String
+    tags      Tag?      @relation(fields: [tagId], references: [id])
+    tagId     String?
+}
+
+model Tag {
     id        String   @id @default(cuid())
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+    name      String   @unique
+    Task      Task[]
 }
 
 // Necessary for Next auth
@@ -52,6 +69,7 @@ model User {
     image         String?
     accounts      Account[]
     sessions      Session[]
+    Task          Task[]
 }
 
 model VerificationToken {
