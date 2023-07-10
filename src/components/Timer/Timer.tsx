@@ -1,4 +1,4 @@
-import { useState, type FC } from 'react'
+import { useState, type FC, useCallback } from 'react'
 
 import Stack from '@mui/material/Stack'
 import PlayCircleIcon from '@mui/icons-material/PlayCircle'
@@ -8,27 +8,27 @@ import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
+import { useTimer } from '~/hooks/useTimer'
 
 dayjs.extend(duration)
 
-const Timer: FC = () => {
+type Props = {
+  onStarted: () => void
+  onStopped: () => void
+}
+const Timer: FC<Props> = () => {
   const [elapsed, setElapsed] = useState(0)
-  const [timer, setTimer] = useState<NodeJS.Timer | null>(null)
+  const { isRunning, start, stop } = useTimer(1000)
 
   const handleStart = () => {
-    const timer = setInterval(() => {
+    start(() => {
       setElapsed((prev) => prev + 1)
-    }, 1000)
-    setTimer(timer)
+    })
   }
 
-  const handleStop = () => {
-    if (timer) {
-      clearInterval(timer)
-      setTimer(null)
-      setElapsed(0)
-    }
-  }
+  const handleStop = useCallback(() => {
+    stop()
+  }, [stop])
 
   return (
     <Stack direction='row' spacing={2} alignItems='center'>
@@ -36,7 +36,7 @@ const Timer: FC = () => {
       <Typography>
         {dayjs.duration(elapsed, 'seconds').format('HH:mm:ss')}
       </Typography>
-      {timer ? (
+      {isRunning ? (
         <IconButton onClick={handleStop}>
           <StopCircleIcon />
         </IconButton>

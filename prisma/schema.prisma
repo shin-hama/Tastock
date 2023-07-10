@@ -19,10 +19,10 @@ model Task {
     updatedAt DateTime  @updatedAt
     name      String?
     startedAt DateTime  @default(now())
-    endedat   DateTime?
+    endedAt   DateTime?
     owner     TaskUser  @relation(fields: [userId], references: [userId])
     userId    String
-    tags      Tag?      @relation(fields: [tagId], references: [id])
+    tag       Tag?      @relation(fields: [tagId], references: [id])
     tagId     String?
 }
 

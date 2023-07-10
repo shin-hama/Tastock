@@ -1,10 +1,18 @@
 import Box from '@mui/material/Box'
 import Head from 'next/head'
+import { useCallback } from 'react'
 import Sidebar from '~/components/Sidebar/Sidebar'
 
 import Timer from '~/components/Timer/Timer'
+import { api } from '~/utils/api'
 
 export default function Home() {
+  const { mutate } = api.task.create.useMutation()
+
+  const handleStartTimer = useCallback(() => {
+    mutate({ name: 'test' })
+  }, [mutate])
+
   return (
     <>
       <Head>
@@ -18,7 +26,7 @@ export default function Home() {
           component='main'
           sx={{ flexGrow: 1, bgcolor: 'background.default', p: 3 }}
         >
-          <Timer />
+          <Timer onStarted={handleStartTimer} />
         </Box>
       </Box>
     </>
