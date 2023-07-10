@@ -44,8 +44,7 @@ export const taskRouter = createTRPCRouter({
           .object({
             name: z.string().optional(),
             endedAt: z.date().optional(),
-            startedAt: z.date().optional(),
-            tag: z.string().optional()
+            startedAt: z.date().optional()
           })
           .optional()
       })
