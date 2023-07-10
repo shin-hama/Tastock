@@ -7,11 +7,18 @@ import Timer from '~/components/Timer/Timer'
 import { api } from '~/utils/api'
 
 export default function Home() {
-  const { mutate } = api.task.create.useMutation()
+  const { data: task, mutate: createTask } = api.task.create.useMutation()
+  const { mutate: finishTask } = api.task.finish.useMutation()
 
   const handleStartTimer = useCallback(() => {
-    mutate({ name: 'test' })
-  }, [mutate])
+    createTask({ name: 'test' })
+  }, [createTask])
+
+  const handleStopTimer = useCallback(() => {
+    if (task) {
+      finishTask(task.id)
+    }
+  }, [finishTask, task])
 
   return (
     <>
@@ -26,7 +33,7 @@ export default function Home() {
           component='main'
           sx={{ flexGrow: 1, bgcolor: 'background.default', p: 3 }}
         >
-          <Timer onStarted={handleStartTimer} />
+          <Timer onStarted={handleStartTimer} onStopped={handleStopTimer} />
         </Box>
       </Box>
     </>
