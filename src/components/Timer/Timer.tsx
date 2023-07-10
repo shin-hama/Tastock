@@ -13,28 +13,36 @@ import { useTimer } from '~/hooks/useTimer'
 dayjs.extend(duration)
 
 type Props = {
+  startTime?: Date
   onStarted: () => void
   onStopped: () => void
 }
-const Timer: FC<Props> = () => {
+const Timer: FC<Props> = ({ startTime, onStarted, onStopped }) => {
   const [elapsed, setElapsed] = useState(0)
   const { isRunning, start, stop } = useTimer(1000)
 
-  const handleStart = () => {
+  const handleStart = useCallback(() => {
     start(() => {
       setElapsed((prev) => prev + 1)
     })
-  }
+    onStarted()
+  }, [onStarted, start])
 
   const handleStop = useCallback(() => {
     stop()
-  }, [stop])
+    setElapsed(0)
+    onStopped()
+  }, [onStopped, stop])
 
   return (
     <Stack direction='row' spacing={2} alignItems='center'>
       <TextField />
-      <Typography>
-        {dayjs.duration(elapsed, 'seconds').format('HH:mm:ss')}
+      <Typography key={elapsed}>
+        {startTime
+          ? dayjs
+              .duration(dayjs().diff(startTime), 'seconds')
+              .format('HH:mm:ss')
+          : '00:00:00'}
       </Typography>
       {isRunning ? (
         <IconButton onClick={handleStop}>

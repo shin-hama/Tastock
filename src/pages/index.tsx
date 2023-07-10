@@ -36,7 +36,11 @@ export default function Home() {
           component='main'
           sx={{ flexGrow: 1, bgcolor: 'background.default', p: 3 }}
         >
-          <Timer onStarted={handleStartTimer} onStopped={handleStopTimer} />
+          <Timer
+            startTime={currentTask?.startedAt}
+            onStarted={handleStartTimer}
+            onStopped={handleStopTimer}
+          />
         </Box>
       </Box>
     </>
