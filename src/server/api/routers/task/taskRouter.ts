@@ -10,12 +10,14 @@ export const taskRouter = createTRPCRouter({
     )
     .mutation(async ({ input, ctx }) => {
       const { session, prisma } = ctx
+      console.log('Before create')
       const newTask = await prisma.task.create({
         data: {
           name: input.name,
           userId: session.user.id
         }
       })
+      console.log('After create')
 
       return newTask
     }),
@@ -65,6 +67,22 @@ export const taskRouter = createTRPCRouter({
       where: {
         userId: {
           equals: session.user.id
+        }
+      }
+    })
+  }),
+  current: protectedProcedure.query(async ({ ctx }) => {
+    const { session, prisma } = ctx
+    return await prisma.task.findFirst({
+      where: {
+        userId: {
+          equals: session.user.id
+        },
+        startedAt: {
+          not: undefined
+        },
+        endedAt: {
+          equals: null
         }
       }
     })

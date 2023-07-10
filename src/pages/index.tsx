@@ -7,18 +7,21 @@ import Timer from '~/components/Timer/Timer'
 import { api } from '~/utils/api'
 
 export default function Home() {
-  const { data: task, mutate: createTask } = api.task.create.useMutation()
+  const { mutate: createTask } = api.task.create.useMutation()
   const { mutate: finishTask } = api.task.finish.useMutation()
+  const { data: currentTask, refetch } = api.task.current.useQuery()
 
   const handleStartTimer = useCallback(() => {
     createTask({ name: 'test' })
-  }, [createTask])
+    console.log('created')
+    refetch().catch(console.error)
+  }, [createTask, refetch])
 
   const handleStopTimer = useCallback(() => {
-    if (task) {
-      finishTask(task.id)
+    if (currentTask) {
+      finishTask(currentTask.id)
     }
-  }, [finishTask, task])
+  }, [finishTask, currentTask])
 
   return (
     <>
