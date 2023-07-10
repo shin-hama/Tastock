@@ -1,4 +1,4 @@
-import { useState, type FC, useCallback } from 'react'
+import { useState, type FC, useCallback, useEffect } from 'react'
 
 import Stack from '@mui/material/Stack'
 import PlayCircleIcon from '@mui/icons-material/PlayCircle'
@@ -33,6 +33,17 @@ const Timer: FC<Props> = ({ startTime, onStarted, onStopped }) => {
     setElapsed(0)
     onStopped()
   }, [onStopped, stop])
+
+  useEffect(() => {
+    // startTime があり、タイマーが起動していないときはタイマーを起動する
+    // 別プロセスでタイマーを起動した後に、Timer コンポーネントが呼ばれたときのため
+    // 別プロセスで起動しているため、Callback が呼ばれない
+    if (startTime && isRunning === false) {
+      start(() => {
+        setElapsed((prev) => prev + 1)
+      })
+    }
+  }, [isRunning, start, startTime])
 
   return (
     <Stack direction='row' spacing={2} alignItems='center'>
