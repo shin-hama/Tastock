@@ -6,7 +6,9 @@ import ListItemButton from '@mui/material/ListItemButton'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
 import TimerIcon from '@mui/icons-material/Timer'
-import SummarizeIcon from '@mui/icons-material/Summarize'
+// import SummarizeIcon from '@mui/icons-material/Summarize'
+import Stack from '@mui/material/Stack'
+import Login from '../Login'
 
 const drawerWidth = 240
 
@@ -18,11 +20,11 @@ const items: Array<SidebarItem> = [
   {
     label: 'Timer',
     icon: <TimerIcon />
-  },
-  {
-    label: 'Report',
-    icon: <SummarizeIcon />
   }
+  // {
+  //   label: 'Report',
+  //   icon: <SummarizeIcon />
+  // }
 ]
 
 const Sidebar = () => {
@@ -30,6 +32,7 @@ const Sidebar = () => {
     <Drawer
       sx={{
         width: drawerWidth,
+        height: '100%',
         flexShrink: 0,
         '& .MuiDrawer-paper': {
           width: drawerWidth,
@@ -39,16 +42,25 @@ const Sidebar = () => {
       variant='permanent'
       anchor='left'
     >
-      <List>
-        {items.map(({ label, icon }) => (
-          <ListItem key={label} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>{icon}</ListItemIcon>
-              <ListItemText primary={label} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
+      <Stack
+        direction={'column'}
+        height='100%'
+        justifyContent={'space-between'}
+      >
+        <List>
+          {items.map(({ label, icon }) => (
+            <ListItem key={label} disablePadding>
+              <ListItemButton>
+                <ListItemIcon>{icon}</ListItemIcon>
+                <ListItemText primary={label} />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+        <Stack>
+          <Login />
+        </Stack>
+      </Stack>
     </Drawer>
   )
 }
