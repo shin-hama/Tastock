@@ -14,7 +14,16 @@ export const taskRouter = createTRPCRouter({
       const newTask = await prisma.task.create({
         data: {
           name: input.name,
-          userId: session.user.id
+          owner: {
+            connectOrCreate: {
+              where: {
+                userId: session.user.id
+              },
+              create: {
+                userId: session.user.id
+              }
+            }
+          }
         }
       })
       console.log('After create')
