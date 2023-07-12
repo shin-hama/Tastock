@@ -8,9 +8,11 @@ import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
+import timezone from 'dayjs/plugin/timezone'
 import { useTimer } from '~/hooks/useTimer'
 
 dayjs.extend(duration)
+dayjs.extend(timezone)
 
 type Props = {
   startTime?: Date
@@ -51,7 +53,10 @@ const Timer: FC<Props> = ({ startTime, onStarted, onStopped }) => {
       <Typography key={elapsed}>
         {startTime
           ? dayjs
-              .duration(dayjs().diff(startTime), 'seconds')
+              .duration(
+                dayjs().diff(dayjs(startTime).tz(dayjs.tz.guess())),
+                'seconds'
+              )
               .format('HH:mm:ss')
           : '00:00:00'}
       </Typography>
